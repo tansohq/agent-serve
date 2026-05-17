@@ -122,8 +122,18 @@ Authorization + payment in single flow. Agent buys domain, starts subscription, 
 If you use Stripe (most SaaS does):
 1. Expose `GET /v1/plans` returning plan IDs, prices, features, limits
 2. Accept `POST /v1/subscriptions` with plan_id + payment_method
-3. Use Stripe Payment Intents API (not Checkout Sessions) for programmatic payment
-4. Add usage-based component if applicable (Stripe metered billing)
+3. Accept `payment_method` (pm_...) in upgrade requests — attach to customer, then subscribe. No browser needed.
+4. Fall back to 402 + checkout URL only when no payment method is provided AND none is on file
+5. Use Stripe Payment Intents API (not Checkout Sessions) for programmatic payment
+6. Add usage-based component if applicable (Stripe metered billing)
+
+Where the `pm_...` comes from:
+- Stripe Projects (agent gets tokenized card automatically)
+- Human pre-authorization via Setup Intent
+- Any agent wallet service issuing Stripe-compatible tokens
+
+Reference: https://docs.stripe.com/api/payment_methods — Stripe Payment Methods API
+Reference: https://docs.stripe.com/payments/save-and-reuse — Save and reuse payment methods
 
 ---
 
