@@ -178,7 +178,7 @@ Core sections:
 | Unknown compliance posture | `compliance` block with certifications |
 | Guessing overage behavior | `overages.model` + `overages.grace_period_days` |
 
-The schema extends schema.org Product/Offer vocabulary with B2B-specific fields. Full spec and worked examples: https://github.com/katrinalaszlo/agent-serve
+The schema extends schema.org Product/Offer vocabulary with B2B-specific fields. See [pricing.schema.json](../../schema/pricing.schema.json) for the full JSON Schema and [pricing.example.json](../../schema/pricing.example.json) for a worked example.
 
 A product that publishes `pricing.json` moves from Purchasing 3/10 to 8/10 on the agent-serve scorecard.
 

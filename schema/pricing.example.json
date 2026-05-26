@@ -1,0 +1,113 @@
+{
+  "$schema": "https://github.com/katrinalaszlo/agent-serve/schema/pricing.schema.json",
+  "product": {
+    "name": "Acme Enrichment API",
+    "vendor": "Acme Data Co",
+    "category": "data-enrichment",
+    "stack_layer": "data",
+    "description": "Real-time company and contact data enrichment via REST API",
+    "url": "https://acme-enrichment.example.com"
+  },
+  "revenue_model": {
+    "type": "usage",
+    "billing_frequency": ["monthly"],
+    "agent_onboarding": true
+  },
+  "value_metric": {
+    "unit": "record enriched",
+    "null_results_billable": false,
+    "metering": "per-request"
+  },
+  "plans": [
+    {
+      "id": "free",
+      "name": "Free",
+      "price": { "amount": 0, "currency": "USD", "per": "month" },
+      "included_usage": { "records": 1000 },
+      "rate_limits": { "requests_per_second": 2 },
+      "features": ["company-enrichment", "basic-fields"],
+      "trial": {
+        "days": 0,
+        "requires_payment_method": false,
+        "api_provisioning_url": "https://api.acme-enrichment.example.com/v1/signup"
+      }
+    },
+    {
+      "id": "price_growth_monthly",
+      "name": "Growth",
+      "price": { "amount": 99, "currency": "USD", "per": "month" },
+      "included_usage": { "records": 25000 },
+      "overage_rate": { "amount": 0.003, "currency": "USD", "per": "record" },
+      "rate_limits": { "requests_per_second": 20 },
+      "features": [
+        "company-enrichment",
+        "contact-enrichment",
+        "all-fields",
+        "webhooks"
+      ],
+      "trial": {
+        "days": 14,
+        "requires_payment_method": true,
+        "api_provisioning_url": "https://api.acme-enrichment.example.com/v1/subscriptions"
+      }
+    },
+    {
+      "id": "price_scale_monthly",
+      "name": "Scale",
+      "price": { "amount": 499, "currency": "USD", "per": "month" },
+      "included_usage": { "records": 200000 },
+      "overage_rate": { "amount": 0.002, "currency": "USD", "per": "record" },
+      "volume_tiers": [
+        { "up_to": 200000, "unit_price": 0.0025 },
+        { "up_to": 1000000, "unit_price": 0.002 },
+        { "up_to": "unlimited", "unit_price": 0.0015 }
+      ],
+      "rate_limits": { "requests_per_second": 100 },
+      "features": [
+        "company-enrichment",
+        "contact-enrichment",
+        "all-fields",
+        "webhooks",
+        "bulk-api",
+        "dedicated-support"
+      ]
+    }
+  ],
+  "overages": {
+    "model": "payg",
+    "grace_period_days": 0,
+    "notification": ["webhook", "email"]
+  },
+  "governance": {
+    "per_key_limits": true,
+    "budget_controls": true,
+    "spend_alerts": true,
+    "burndown_api": false
+  },
+  "compliance": {
+    "certifications": ["soc2-type2", "gdpr", "ccpa"],
+    "data_residency": ["US", "EU"],
+    "dpa_url": "https://acme-enrichment.example.com/legal/dpa"
+  },
+  "integration": {
+    "api_docs_url": "https://docs.acme-enrichment.example.com",
+    "openapi_spec_url": "https://api.acme-enrichment.example.com/v1/openapi.json",
+    "mcp_server": false,
+    "sdk_languages": ["python", "node", "go"],
+    "auth_methods": ["api-key", "oauth-client-credentials"]
+  },
+  "support": {
+    "sla_uptime": "99.9%",
+    "response_time": {
+      "critical": "1 hour",
+      "high": "4 hours",
+      "normal": "1 business day"
+    },
+    "channels": ["email", "chat", "slack"]
+  },
+  "contact": {
+    "sales_url": "https://acme-enrichment.example.com/sales",
+    "pricing_page_url": "https://acme-enrichment.example.com/pricing",
+    "quote_api_url": "https://api.acme-enrichment.example.com/v1/quotes"
+  }
+}
