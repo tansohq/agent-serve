@@ -62,6 +62,14 @@ A fully agent-serve product has:
 
 The skill produces a scorecard with specific recommendations for each dimension, referencing how gold-standard companies solve each problem.
 
+## What's next
+
+If you run a B2B SaaS with self-serve signup, this series is for you. Each part goes deeper into the funnel and includes something you can run on your own product.
+
+**Part 2: Discovery + AEO** — How agents find and evaluate your product, what they look for, and how to measure whether you're showing up.
+
+**Part 3: Self-Serve** — Takes the same self-serve optimization lens to the agent era: what agent-ready onboarding, auth, purchasing, and account management actually require, where the industry recommendations fall short, and an open-source audit to score any SaaS across the full funnel.
+
 ## Author
 
 Kat Laszlo — [@katlaszlo](https://x.com/Katlaszlo)
