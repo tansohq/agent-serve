@@ -38,7 +38,7 @@ Check for:
 
 Check for:
 - Programmatic plan selection endpoint
-- Payment without browser redirect (tokenized cards, Stripe API)
+- Payment via Stripe API (Payment Intents / saved payment methods) without browser redirect
 - Transparent pricing (machine-readable plans, limits, rates)
 - Whether upgrade/plan-change requires "talk to sales"
 
@@ -47,8 +47,8 @@ Check for:
 | 0 | "Contact sales" only |
 | 3 | Self-serve pricing page but payment requires browser checkout |
 | 5 | Stripe Checkout with direct link (semi-programmatic) |
-| 8 | Full billing API (select plan, attach payment, activate) |
-| 10 | Agent marketplace model (Stripe Projects / Cloudflare) |
+| 8 | Full billing API — plan catalog, Stripe Subscriptions + saved payment method, no browser |
+| 10 | 8 + machine-readable pricing (pricing.json) + spending policies + agent self-serve upgrades |
 
 ## Usage Monitoring (0-10)
 

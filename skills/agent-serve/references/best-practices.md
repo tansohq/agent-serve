@@ -91,17 +91,30 @@ Cryptographic agent identity. WAFs can whitelist verified agents without CAPTCHA
 
 ## Purchasing Patterns
 
-### Gold Standard: Stripe Projects (2026)
+### How It Works Today: Agents Use Stripe Like Any API Client
 
-Protocol for agent purchasing:
-1. Agent discovers service catalog (JSON endpoint)
-2. Agent selects plan/service
-3. Agent pays via tokenized one-time-use card (Stripe Link)
-4. Human sets spending policy once; agent executes within guardrails
+Most SaaS already uses Stripe. Agents don't need a special payment protocol — they need you to expose what Stripe already supports as API endpoints instead of browser redirects.
 
-### Gold Standard: Cloudflare + Stripe Co-Designed Protocol
+The pattern: human pre-authorizes a payment method once (Setup Intent → saved `pm_...`), agent reuses it for purchases via Stripe's Subscriptions API. No browser, no checkout page, no human in the loop after initial setup.
 
-Authorization + payment in single flow. Agent buys domain, starts subscription, deploys — all API calls.
+### Practical Implementation (works now, no special programs)
+
+If you use Stripe (most SaaS does):
+1. Expose `GET /v1/plans` returning plan IDs, prices, features, limits
+2. Accept `POST /v1/subscriptions` with plan_id + payment_method
+3. Accept `payment_method` (pm_...) in upgrade requests — attach to customer, then subscribe. No browser needed.
+4. Fall back to 402 + checkout URL only when no payment method is provided AND none is on file
+5. Use Stripe Payment Intents API (not Checkout Sessions) for programmatic payment
+6. Add usage-based component if applicable (Stripe metered billing)
+
+Where the `pm_...` comes from:
+- **Human pre-authorization via Setup Intent** — most common path. Human saves a card once, agent uses it going forward
+- **Stripe Link wallet** — agent draws from the human's Link account
+- **Stripe Agent Toolkit** (`@stripe/agent-toolkit`) — gives agents direct access to Stripe operations with scoped permissions
+
+Reference: https://docs.stripe.com/api/payment_methods — Stripe Payment Methods API
+Reference: https://docs.stripe.com/payments/save-and-reuse — Save and reuse payment methods
+Reference: https://docs.stripe.com/agents — Stripe Agent Toolkit
 
 ### What Works
 - Plan catalog as JSON endpoint (`GET /v1/plans`)
@@ -118,22 +131,28 @@ Authorization + payment in single flow. Agent buys domain, starts subscription, 
 - Enterprise-only tiers with no self-serve option
 - Annual-only billing (agents need monthly or usage-based for flexibility)
 
-### Practical Fix
-If you use Stripe (most SaaS does):
-1. Expose `GET /v1/plans` returning plan IDs, prices, features, limits
-2. Accept `POST /v1/subscriptions` with plan_id + payment_method
-3. Accept `payment_method` (pm_...) in upgrade requests — attach to customer, then subscribe. No browser needed.
-4. Fall back to 402 + checkout URL only when no payment method is provided AND none is on file
-5. Use Stripe Payment Intents API (not Checkout Sessions) for programmatic payment
-6. Add usage-based component if applicable (Stripe metered billing)
+### A Note on "Tokenized Payments"
 
-Where the `pm_...` comes from:
-- Stripe Projects (agent gets tokenized card automatically)
-- Human pre-authorization via Setup Intent
-- Any agent wallet service issuing Stripe-compatible tokens
+You'll see "tokenized payments" in agent commerce writing. There are two layers:
 
-Reference: https://docs.stripe.com/api/payment_methods — Stripe Payment Methods API
-Reference: https://docs.stripe.com/payments/save-and-reuse — Save and reuse payment methods
+**Saved payment methods (`pm_...`)** — the familiar Stripe pattern. Human saves a card via Setup Intent, agent reuses the `pm_...` to subscribe. Works today, no special program needed. Limitation: only works within one merchant's Stripe account.
+
+**Agent-specific primitives (new, 2026)** — genuinely different from saved cards:
+- **Shared Payment Tokens (SPTs)** — time-limited (minutes, not permanent), scoped to a specific business, revocable. Work cross-merchant via Link wallet. Supports cards, Affirm, Klarna.
+- **Issuing for agents** — actual virtual card numbers agents use at any merchant, with per-transaction spend controls and real-time authorization.
+- **Link wallet** — human authorizes wallet access once, agent requests a new one-time card or SPT per transaction, across different vendors. Agent never sees raw credentials.
+
+The cross-merchant capability is the real difference. A saved `pm_...` is locked to one Stripe account. SPTs and virtual cards let agents pay across merchants with human-set guardrails.
+
+For most SaaS building agent-friendly purchasing: accept saved `pm_...` via your API first (that gets you to 8/10). SPTs and virtual cards will flow in from agents that already have them — you don't need to implement anything extra to accept them.
+
+### Aspirational: Stripe Projects (invitation-only, 2026)
+
+Stripe Projects is a curated marketplace where agents get scoped API keys, discover services from a catalog, and pay via one-time-use virtual cards. 32 launch partners (Vercel, Cloudflare, Supabase, PlanetScale, etc.). To join as a provider, you apply through Stripe's provider intake — it's not self-serve.
+
+Cloudflare co-designed a protocol with Stripe where authorization + payment happen in a single flow. Agent buys domain, starts subscription, deploys — all API calls.
+
+This is the future direction, but most SaaS should focus on the Setup Intent + Subscriptions API pattern first. That gets you to 8/10 on the agent-serve scorecard. Projects catalog inclusion is the 10/10 tier for companies building dev-infra.
 
 ### The Missing Piece: Machine-Readable Pricing (`pricing.json`)
 

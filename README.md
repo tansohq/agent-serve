@@ -43,7 +43,7 @@ This skill audits your SaaS product's readiness for agent customers.
 
 ## Gold standards
 
-- **Stripe Projects** — Agents get scoped API keys, select services from catalog, pay via tokenized cards
+- **Stripe Projects** — Agents get scoped API keys, select services from catalog, pay via Stripe Payments API (invitation-only, 32 launch partners)
 - **Cloudflare** — Agents create accounts, buy domains, deploy apps. Zero manual steps.
 - **Twilio** — Full API for everything. Usage Records API, programmatic number provisioning.
 - **OpenAI** — Usage endpoints, rate limit headers on every response, auto-tier promotion.
