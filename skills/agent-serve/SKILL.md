@@ -1,6 +1,6 @@
 ---
 name: agent-serve
-description: "Audit whether AI agents can buy and use your SaaS product. Scores 5 dimensions, finds blockers."
+description: "Audits a SaaS product across five areas to find what blocks AI agents from signing up, authenticating, paying, monitoring usage, and self-managing — then recommends specific API endpoints, auth patterns, and billing integrations to build. Use when evaluating whether a product is ready for agent customers or planning an agent-readiness roadmap."
 when_to_use: "agent customers, API onboarding, programmatic purchasing, agent-friendly auth, MCP server, agentic commerce, self-serve for agents"
 disable-model-invocation: true
 user-invocable: true
@@ -8,90 +8,120 @@ allowed-tools: WebFetch Read(*) Write(*) Bash(find *) Bash(grep *) Bash(ls *)
 argument-hint: "[url-or-nothing]"
 ---
 
-# agent-serve — Can Agents Buy and Use Your Product?
+# agent-serve — Make Your Product Self-Serve for Agents
 
-Audit SaaS products for agent-customer readiness.
+Full audit across all five areas. Find what's blocking agents and tell the developer exactly what to build.
 
 ## Philosophy
 
-The question isn't "is my site discoverable by agents?" (that's agent-web).
-The question is: "can an agent sign up, pay, and use my product without a human touching anything?"
+The question isn't "is my site discoverable by agents?" — the question is: "can an agent sign up, pay, and use my product without a human touching anything?"
 
-If the answer is no, you're invisible to the agentic economy. Agents will route spend to competitors that let them self-serve.
+If the answer is no, agents will route spend to competitors that let them self-serve.
 
 ## Detect Mode
 
 If `$ARGUMENTS` contains a URL:
-→ **URL mode**: Fetch the live product (marketing site, docs, API reference). Audit what's publicly visible about the agent experience.
+Fetch the live product (marketing site, docs, API reference). Audit what's publicly visible.
 
 If `$ARGUMENTS` is empty:
-→ **Repo mode**: Audit the current codebase. Look at API routes, auth middleware, billing integration, docs.
+Audit the current codebase. Look at API routes, auth middleware, billing integration, docs.
 
 ## Step 1: Understand the Product
 
-Before scoring, determine:
+Before diagnosing, determine:
 - What does this product do?
 - Who are the current customers (humans? developers? both?)
 - Is there an existing API?
 - What billing system is used? (Stripe, custom, none visible)
 - Is there documentation? Where?
 
-## Step 2: Audit Each Dimension
+If the product has NO API at all, read [starting-from-zero.md](references/starting-from-zero.md) for the incremental build sequence.
 
-Score each dimension 0-10. Read [scoring-rubrics.md](references/scoring-rubrics.md) for detailed criteria and anchor points.
+## Step 2: Check Each Area
 
-1. **Onboarding** — Can an agent create an account without a browser?
-2. **Authentication** — Can an agent prove identity without human ceremony?
-3. **Purchasing** — Can an agent select a plan and pay programmatically?
-4. **Usage Monitoring** — Can an agent track its own consumption?
-5. **Self-Management** — Can an agent change plans or cancel without a human?
+For each area, find what exists and what's missing:
 
-## Step 3: Score
+### Onboarding
+- Does `POST /signup` or `POST /accounts` exist?
+- Does it require CAPTCHA, email verification, phone, or browser?
+- Is there instant sandbox/trial access?
+- Can agents provision immediately (deploy-first-claim-later)?
+
+### Authentication
+- Do API keys exist? Scoped? Rotatable via API?
+- Is OAuth Client Credentials supported?
+- Are there blockers: magic links, SMS OTP, browser-only OAuth consent?
+
+### Purchasing
+- Is there a JSON plan catalog (`GET /plans`)?
+- Can subscriptions be created via API with a saved payment method?
+- Does checkout require a browser redirect?
+- Is pricing machine-readable (pricing.json)?
+
+### Usage Monitoring
+- Do responses include rate limit headers?
+- Is there a usage API with current-period data?
+- Are there threshold webhooks?
+
+### Self-Management
+- Can plans be changed/canceled via API?
+- Is configuration changeable via API?
+- Does the product ship an MCP server?
+
+## Step 3: Report
 
 ```
-## Agent-Serve Audit: [product]
-Overall: X/50
+## Agent-Serve: [product]
 
-### Onboarding: X/10
-[specific findings]
+### Onboarding
+**Today:** [what exists]
+**Blocks agents:** [specific friction]
+**Build:** [specific fix with effort estimate]
 
-### Authentication: X/10
-[specific findings]
+### Authentication
+**Today:** [what exists]
+**Blocks agents:** [specific friction]
+**Build:** [specific fix]
 
-### Purchasing: X/10
-[specific findings]
+### Purchasing
+**Today:** [what exists]
+**Blocks agents:** [specific friction]
+**Build:** [specific fix]
 
-### Usage Monitoring: X/10
-[specific findings]
+### Usage Monitoring
+**Today:** [what exists]
+**Blocks agents:** [specific friction]
+**Build:** [specific fix]
 
-### Self-Management: X/10
-[specific findings]
+### Self-Management
+**Today:** [what exists]
+**Blocks agents:** [specific friction]
+**Build:** [specific fix]
 
-## Blockers (things that completely prevent agent use)
-- [list any hard blockers: CAPTCHA, email-only, contact-sales gates]
+## Hard Blockers
+- [things that completely prevent agent use — fix these first]
 
-## Quick Wins (highest impact, lowest effort)
-1. [specific recommendation]
-2. [specific recommendation]
-3. [specific recommendation]
+## Quick Wins
+1. [highest impact, lowest effort]
+2. [next]
+3. [next]
+
+## Roadmap
+[prioritized sequence: blockers -> quick wins -> full maturity]
 ```
 
-## Step 4: Advise
+## Step 4: Roadmap
 
-For each dimension scoring below 5, read [best-practices.md](references/best-practices.md) and provide:
-- **Current state** — what exists today
-- **What blocks agents** — the specific friction
-- **Gold standard** — who does this well
-- **Recommended fix** — specific code/infra changes. Effort: hours / days / weeks
-
-## Step 5: Roadmap
-
-Prioritized list ordered by:
+Prioritized build sequence:
 1. Hard blockers first (things that completely prevent agent use)
 2. Quick wins (high impact, low effort)
 3. Full maturity (complete agent-serve stack)
 
-For each item: effort, dependency, and reference company.
+For each item: what to build, effort, dependency, and who does it well today.
+
+Read [maturity.md](references/maturity.md) for levels 0-4 (Agent-Hostile to Agent-First) and how to assess where the product sits.
+Read [checklist.md](references/checklist.md) for the full readiness checklist.
+Read [emerging-standards.md](references/emerging-standards.md) for standards to watch (Stripe Projects, Web Bot Auth, MCP, A2A, x402).
 
 ## Important Rules
 
@@ -100,4 +130,4 @@ For each item: effort, dependency, and reference company.
 - Reference real implementations. Stripe's API, Cloudflare's agent provisioning, Twilio's usage records.
 - Don't recommend an MCP server unless the product already has a solid API. MCP is a layer on top of APIs, not a replacement.
 - Acknowledge business constraints. "Remove CAPTCHA" has security implications. Note the tradeoff, suggest alternatives (Web Bot Auth, proof-of-work, IP reputation).
-- If the product is pre-API (dashboard-only), say so clearly. The roadmap is longer but the direction is the same.
+- If the product is pre-API (dashboard-only), say so clearly. Read [starting-from-zero.md](references/starting-from-zero.md) for the 4-week sequence.

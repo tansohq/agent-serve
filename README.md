@@ -1,37 +1,67 @@
 # agent-serve
 
-Can AI agents buy and use your product without a human? Find out.
+Make your product self-serve for AI agents.
 
 ## Install
 
 ```bash
+# Everything (full audit + all 5 focused skills)
 npx skills add katrinalaszlo/agent-serve
+
+# Or just the area you need
+npx skills add katrinalaszlo/agent-serve --skill agent-serve-onboarding
+npx skills add katrinalaszlo/agent-serve --skill agent-serve-auth
+npx skills add katrinalaszlo/agent-serve --skill agent-serve-purchasing
+npx skills add katrinalaszlo/agent-serve --skill agent-serve-usage
+npx skills add katrinalaszlo/agent-serve --skill agent-serve-self-management
 ```
 
-## The thesis
+## What this is
 
-Agents are becoming buyers. If they can't sign up, authenticate, pay, and use your product programmatically, you're invisible to the agentic economy.
+A set of Claude Code skills that find what's blocking agents from using your product and tell you exactly what to build to fix it.
 
-This skill audits your SaaS product's readiness for agent customers.
+Agents are becoming buyers. If they can't sign up, authenticate, pay, and use your product programmatically, they'll route spend to competitors that let them self-serve.
 
-## Two modes
+## Skills
+
+| Skill | Command | The question it answers |
+|-------|---------|------------------------|
+| **Full audit** | `/agent-serve` | Can agents buy and use your product end-to-end? |
+| **Onboarding** | `/agent-serve-onboarding` | Can an agent create an account without a browser? |
+| **Auth** | `/agent-serve-auth` | Can an agent prove identity without human ceremony? |
+| **Purchasing** | `/agent-serve-purchasing` | Can an agent select a plan and pay via API? |
+| **Usage** | `/agent-serve-usage` | Can an agent track its own consumption? |
+| **Self-Management** | `/agent-serve-self-management` | Can an agent change plans or cancel without a human? |
+
+Each skill works in two modes:
 
 ```bash
-/agent-serve https://example.com    # Audit a live product
-/agent-serve                        # Audit from codebase
+/agent-serve-auth https://example.com    # Audit a live product
+/agent-serve-auth                        # Audit from codebase
 ```
 
-## Five dimensions (scored 0-10)
+## What you get
 
-| Dimension | What it checks |
-|-----------|---------------|
-| **Onboarding** | Can an agent create an account without a browser? |
-| **Authentication** | API keys? OAuth client credentials? Or CAPTCHA hell? |
-| **Purchasing** | Can an agent select a plan and pay programmatically? |
-| **Usage Monitoring** | Can an agent track its own consumption via API? |
-| **Self-Management** | Can an agent upgrade, downgrade, cancel without a human? |
+For each area, the skill tells you:
+- **What exists today** — what the product already supports
+- **What blocks agents** — the specific friction
+- **What to build** — concrete fixes with effort estimates, referencing how companies like Stripe, Cloudflare, and Twilio solved each problem
 
-## What blocks agents (anti-patterns)
+## The patterns that matter
+
+**Onboarding:** `POST /v1/accounts` returns account ID + API key in one call. No CAPTCHA, no email loop. Deploy-first-claim-later for dev tools.
+
+**Auth:** OAuth Client Credentials for machine-to-machine. Scoped API keys with rotation endpoint. No magic links, no SMS OTP on programmatic paths.
+
+**Purchasing:** Expose what Stripe already supports as API endpoints. Human saves a payment method once (Setup Intent), agent reuses it. `GET /plans` returns the catalog, `POST /subscriptions` creates one. No browser checkout required. Publish `pricing.json` for machine-readable pricing discovery.
+
+**Usage:** Rate limit headers on every response. Dedicated usage endpoint with current-period data. Threshold webhooks so agents can self-throttle.
+
+**Management:** Plan changes, cancellation, configuration — all via API. MCP server as the agent-facing interface for products that are ready.
+
+**Starting from zero:** Pick one read endpoint and ship it. Then one write. Then usage visibility. Then programmatic signup. Four weeks from dashboard-only to agent-possible.
+
+## What blocks agents
 
 - CAPTCHA / reCAPTCHA
 - Email verification loops
@@ -41,34 +71,11 @@ This skill audits your SaaS product's readiness for agent customers.
 - PDF-only documentation
 - Dashboard-only configuration
 
-## Gold standards
-
-- **Stripe Projects** — Agents get scoped API keys, select services from catalog, pay via Stripe Payments API (invitation-only, 32 launch partners)
-- **Cloudflare** — Agents create accounts, buy domains, deploy apps. Zero manual steps.
-- **Twilio** — Full API for everything. Usage Records API, programmatic number provisioning.
-- **OpenAI** — Usage endpoints, rate limit headers on every response, auto-tier promotion.
-
-## What good looks like
-
-A fully agent-serve product has:
-1. API-based account creation (no browser required)
-2. OAuth Client Credentials or API key auth (no human in the loop)
-3. Programmatic plan selection + payment (Stripe-powered or equivalent)
-4. Usage/billing API (real-time consumption data)
-5. Self-serve plan changes via API (upgrade, downgrade, cancel)
-6. MCP server as the agent-facing product interface
-
-## Output
-
-The skill produces a scorecard with specific recommendations for each dimension, referencing how gold-standard companies solve each problem.
-
 ## What's next
 
-If you run a B2B SaaS with self-serve signup, this series is for you. Each part goes deeper into the funnel and includes something you can run on your own product.
+**Part 2: Is Your Site Ready for AI?** — How agents find and evaluate your product, what they look for, and how to measure whether you're showing up.
 
-**Part 2: Discovery + AEO** — How agents find and evaluate your product, what they look for, and how to measure whether you're showing up.
-
-**Part 3: Self-Serve** — Takes the same self-serve optimization lens to the agent era: what agent-ready onboarding, auth, purchasing, and account management actually require, where the industry recommendations fall short, and an open-source audit to score any SaaS across the full funnel.
+**Part 3: Onboarding Agents** — The full agent-ready funnel: what onboarding, auth, purchasing, and account management actually require, where industry recommendations fall short, and what to build.
 
 ## Author
 
