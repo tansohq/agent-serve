@@ -9,7 +9,7 @@ Agents create accounts, buy domains, start paid subscriptions, deploy apps. Zero
 
 ## Gold Standard: Stripe Projects
 
-Agents get scoped API keys per project with explicit capabilities (read billing, create charges up to threshold). 32 launch partners.
+Agents get scoped API keys per project with explicit capabilities (read billing, create charges up to threshold). GA since April 2026 with 32 providers.
 
 ## What Works
 - `POST /v1/accounts` — returns account ID + API key in one call
@@ -21,12 +21,12 @@ Agents get scoped API keys per project with explicit capabilities (read billing,
 
 | Anti-Pattern | Why It Kills Agents | Fix |
 |---|---|---|
-| CAPTCHA | Browser fingerprinting, behavioral scoring | Web Bot Auth (RFC 9421, live at Cloudflare/AWS WAF/Vercel/Shopify), IP reputation, proof-of-work |
+| CAPTCHA | Browser fingerprinting, behavioral scoring | Web Bot Auth (profile of RFC 9421, live at Cloudflare/AWS WAF/Vercel/Shopify/Akamai as of early 2026), IP reputation, proof-of-work |
 | Email verification | Agent has no inbox | OAuth Client Credentials, domain verification |
 | SMS OTP | Requires phone | TOTP (agent can compute), or skip for API-only access |
 | Manual approval queues | "We'll review your application" | Self-serve provisioning API |
 | Multi-step browser wizards | No headless path | Single API call signup |
-| Device fingerprinting | Headless Chrome gets blocked | Web Bot Auth (RFC 9421), allowlist verified agents |
+| Device fingerprinting | Headless Chrome gets blocked | Web Bot Auth (profile of RFC 9421), allowlist verified agents |
 
 ## Practical Fix
 

@@ -52,5 +52,5 @@ Read [pricing-json.md](references/pricing-json.md) for the `pricing.json` schema
 ## Rules
 - Most SaaS already uses Stripe. The fix is usually "expose what Stripe supports as API endpoints" not "build a new billing system."
 - Be specific about the Stripe API pattern: Setup Intent for saving payment methods, Payment Intents for charges, Subscriptions API for recurring.
-- Don't recommend Stripe Projects unless the product is dev-infra with an existing solid API. It's invitation-only and aspirational for most.
+- Don't recommend Stripe Projects unless the product is dev-infra with an existing solid API. It's GA (since April 2026, 32 providers) but additive — most should start with Setup Intent + Subscriptions API.
 - pricing.json is the quick win for discoverability — recommend publishing it at the domain root.

@@ -36,7 +36,7 @@ Audit the current codebase. Look at auth middleware, token generation, OAuth con
 - Session cookies without API token alternative
 
 ## Deep Patterns
-Read [patterns.md](references/patterns.md) for the auth hierarchy (best to worst for agents), OAuth Client Credentials flow, Stripe API key model, and Web Bot Auth (IETF draft).
+Read [patterns.md](references/patterns.md) for the auth hierarchy (best to worst for agents), OAuth Client Credentials flow, Stripe API key model, and Web Bot Auth (IETF WG chartered early 2026).
 
 ## Report
 
