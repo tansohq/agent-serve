@@ -58,8 +58,8 @@ The cross-merchant capability is the real difference. A saved `pm_...` is locked
 
 For most SaaS building agent-friendly purchasing: accept saved `pm_...` via your API first. SPTs and virtual cards will flow in from agents that already have them — you don't need to implement anything extra to accept them.
 
-## Aspirational: Stripe Projects (invitation-only, 2026)
+## Stripe Projects (GA since April 2026)
 
-Stripe Projects is a curated marketplace where agents get scoped API keys, discover services from a catalog, and pay via one-time-use virtual cards. To join as a provider, you apply through Stripe's provider intake — it's not self-serve.
+Stripe Projects is a curated marketplace where agents get scoped API keys, discover services from a catalog, and pay via one-time-use virtual cards. Launched at Sessions 2026 with 32 providers. To join as a provider, apply through Stripe's provider intake.
 
-This is the future direction, but most SaaS should focus on the Setup Intent + Subscriptions API pattern first.
+Most SaaS should still focus on the Setup Intent + Subscriptions API pattern first — Projects is additive, not a prerequisite.

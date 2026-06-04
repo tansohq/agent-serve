@@ -25,11 +25,11 @@ Simple, effective:
 - Key rotation via API
 - Test mode keys for sandbox
 
-## Shipping Now: Web Bot Auth (RFC 9421)
+## Shipping Now: Web Bot Auth
 
-Cryptographic agent identity via HTTP Message Signatures. Agents register public keys in a well-known directory; WAFs verify identity without CAPTCHA.
+Web Bot Auth is a profile of RFC 9421 (HTTP Message Signatures) specifically for bot authentication. The IETF Web Bot Auth WG was chartered in early 2026. RFC 9421 is the generic signatures standard; Web Bot Auth narrows it to agent identity verification at WAFs.
 
-Live implementations: Cloudflare, AWS WAF, Vercel, Shopify, Akamai. Visa Trusted Agent Protocol and Mastercard Agent Pay build on it — agents get entries in card-network directories of verified agents. Amazon Bedrock AgentCore Browser uses it to reduce CAPTCHAs.
+Agents register public keys in a well-known directory; WAFs verify identity without CAPTCHA. Implementations (as of early 2026): Cloudflare, AWS WAF, Vercel, Shopify, Akamai. Visa Trusted Agent Protocol and Mastercard Agent Pay address the same agent identity problem at the card network layer. Amazon Bedrock AgentCore Browser uses HTTP Message Signatures to reduce CAPTCHAs.
 
 For product builders: if your auth friction is "agents can't get past the WAF/CAPTCHA," Web Bot Auth is the fix now, not a future direction. Support it alongside API keys and Client Credentials.
 

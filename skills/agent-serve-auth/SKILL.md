@@ -51,4 +51,4 @@ Read [patterns.md](references/patterns.md) for the auth hierarchy (best to worst
 - Reference the auth hierarchy: API keys with scopes > Client Credentials > Service accounts > Auth Code + PKCE > Magic links > CAPTCHA.
 - Don't recommend removing human auth — recommend ADDING a machine-to-machine path alongside it.
 - Key rotation is table stakes. If keys exist but can't be rotated via API, flag it.
-- Web Bot Auth (RFC 9421) is live at Cloudflare, AWS WAF, Vercel, Shopify, Akamai. Recommend it as a current fix for WAF/CAPTCHA friction, not just a future direction.
+- Web Bot Auth (profile of RFC 9421, IETF WG chartered early 2026) is live at Cloudflare, AWS WAF, Vercel, Shopify, Akamai (as of early 2026). Recommend it as a current fix for WAF/CAPTCHA friction, not just a future direction.
