@@ -47,6 +47,10 @@ For each area, the skill tells you:
 - **What blocks agents** — the specific friction
 - **What to build** — concrete fixes with effort estimates, referencing how companies like Stripe, Cloudflare, and Twilio solved each problem
 
+### Example output
+
+![Example agent-serve audit output](example-output.png)
+
 ## The patterns that matter
 
 **Onboarding:** `POST /v1/accounts` returns account ID + API key in one call. No CAPTCHA, no email loop. Deploy-first-claim-later for dev tools.
