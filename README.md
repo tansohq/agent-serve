@@ -5,7 +5,7 @@ Make your product self-serve for AI agents.
 ## Install
 
 ```bash
-# Everything (full audit + all 5 focused skills)
+# Everything (full audit + all 6 focused skills)
 npx skills add katrinalaszlo/agent-serve
 
 # Or just the area you need
@@ -14,6 +14,7 @@ npx skills add katrinalaszlo/agent-serve --skill agent-serve-auth
 npx skills add katrinalaszlo/agent-serve --skill agent-serve-purchasing
 npx skills add katrinalaszlo/agent-serve --skill agent-serve-usage
 npx skills add katrinalaszlo/agent-serve --skill agent-serve-self-management
+npx skills add katrinalaszlo/agent-serve --skill agent-serve-dev-ready
 ```
 
 ## What this is
@@ -32,6 +33,7 @@ Agents are becoming buyers. If they can't sign up, authenticate, pay, and use yo
 | **Purchasing** | `/agent-serve-purchasing` | Can an agent select a plan and pay via API? |
 | **Usage** | `/agent-serve-usage` | Can an agent track its own consumption? |
 | **Self-Management** | `/agent-serve-self-management` | Can an agent change plans or cancel without a human? |
+| **Dev Ready** | `/agent-serve-dev-ready` | Is your API good to build against? |
 
 Each skill works in two modes:
 
@@ -62,6 +64,8 @@ For each area, the skill tells you:
 **Usage:** Rate limit headers on every response. Dedicated usage endpoint with current-period data. Threshold webhooks so agents can self-throttle.
 
 **Management:** Plan changes, cancellation, configuration — all via API. MCP server as the agent-facing interface for products that are ready.
+
+**Dev ready:** Structured JSON errors with type, code, message, and failing parameter. Idempotency keys on mutating endpoints. Cursor-based pagination. API versioning with deprecation policy. OpenAPI spec published. Test mode with separate keys. llms.txt at domain root. Curated MCP server (10-15 tools, not full API dump). A2A Agent Card if exposing agent-to-agent capabilities.
 
 **Starting from zero:** Pick one read endpoint and ship it. Then one write. Then usage visibility. Then programmatic signup. Four weeks from dashboard-only to agent-possible.
 

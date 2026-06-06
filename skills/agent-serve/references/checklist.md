@@ -16,3 +16,14 @@
 - [ ] OpenAPI spec (complete, versioned)
 - [ ] No CAPTCHA on any programmatic path
 - [ ] No "contact sales" gates on any tier
+- [ ] Structured JSON error responses with type, code, message, and failing parameter
+- [ ] Request ID (`X-Request-Id`) on every response
+- [ ] Idempotency key support on mutating endpoints (POST/PATCH/DELETE)
+- [ ] Cursor-based pagination on list endpoints with `has_more`
+- [ ] API versioned with pinnable versions and deprecation policy
+- [ ] Test mode with separate keys and fixtures
+- [ ] `/llms.txt` with curated technical content
+- [ ] Quickstart: zero to first API call in under 5 minutes
+- [ ] MCP tool surface curated (10-15 tools, not full API dump)
+- [ ] MCP tool descriptions written for AI agents ("Use this when..." phrasing)
+- [ ] A2A Agent Card at well-known URL (if exposing agent-to-agent capabilities)

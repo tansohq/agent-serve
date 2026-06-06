@@ -83,3 +83,27 @@ Check for:
 | 5 | Plan changes via API, but cancel requires support |
 | 8 | Full lifecycle management via API |
 | 10 | Complete self-serve + MCP server for agent interaction |
+
+## Dev Readiness (0-10)
+
+Check for:
+- Structured error responses with type, code, message, and failing parameter
+- Request IDs on every response
+- Idempotency key support on mutating endpoints
+- Cursor-based pagination on list endpoints
+- API versioning with pinnable versions
+- OpenAPI spec published and complete
+- Test mode with separate keys and fixtures
+- llms.txt with curated technical content
+- MCP server quality (tool naming, descriptions, curated surface)
+- A2A Agent Card (if applicable)
+- SDK availability and quickstart quality
+- Time-to-first-call
+
+| Score | Meaning |
+|-------|---------|
+| 0 | HTML errors, no docs, no test mode, no versioning |
+| 3 | JSON errors but generic, basic docs exist, no idempotency |
+| 5 | Structured errors + OpenAPI spec + some test mode, but no idempotency or versioning |
+| 8 | Full error model + idempotency + cursor pagination + versioned API + test mode + SDK + llms.txt |
+| 10 | 8 + time-to-first-call under 5 min + curated MCP server + agent toolkit (if applicable) + A2A Agent Card (if applicable) |

@@ -57,3 +57,19 @@
 - New primitives beyond standard infra
 
 Key test: "If you haven't created any net-new primitives for agents, you haven't started building for the agent-native world." (Burazin)
+
+---
+
+## Dev Readiness as an Intersecting Dimension
+
+The levels above measure ACCESS — can agents get in? Dev readiness measures QUALITY — is it good once they're in? These are orthogonal:
+
+- **Level 3 access + poor dev readiness**: everything is API-accessible but errors are vague, no idempotency, no test mode, offset pagination breaks under load.
+- **Level 1 access + great dev readiness**: only core features exposed but the API is beautifully designed — structured errors, idempotency, cursor pagination, OpenAPI spec.
+
+The practical progression:
+- Level 0-1: API design quality doesn't matter yet (no API or minimal API)
+- Level 2: Dev readiness becomes the differentiator. Two products with API-possible access — the one with structured errors, test mode, and an OpenAPI spec wins.
+- Level 3-4: Dev readiness is table stakes. MCP server quality, A2A Agent Card, agent toolkits, and llms.txt separate the leaders.
+
+Assess both dimensions independently. A product can be agent-friendly (Level 3) but developer-hostile (poor DX) — or developer-friendly (great DX) but agent-hostile (no programmatic access).

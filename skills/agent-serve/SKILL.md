@@ -1,6 +1,6 @@
 ---
 name: agent-serve
-description: "Audits a SaaS product across five areas to find what blocks AI agents from signing up, authenticating, paying, monitoring usage, and self-managing — then recommends specific API endpoints, auth patterns, and billing integrations to build. Use when evaluating whether a product is ready for agent customers or planning an agent-readiness roadmap."
+description: "Audits a SaaS product across six areas to find what blocks AI agents from signing up, authenticating, paying, monitoring usage, self-managing, and integrating reliably — then recommends specific API endpoints, auth patterns, billing integrations, and dev-readiness improvements to build. Use when evaluating whether a product is ready for agent customers or planning an agent-readiness roadmap."
 when_to_use: "agent customers, API onboarding, programmatic purchasing, agent-friendly auth, MCP server, agentic commerce, self-serve for agents"
 disable-model-invocation: true
 user-invocable: true
@@ -10,7 +10,7 @@ argument-hint: "[url-or-nothing]"
 
 # agent-serve — Make Your Product Self-Serve for Agents
 
-Full audit across all five areas. Find what's blocking agents and tell the developer exactly what to build.
+Full audit across all six areas. Find what's blocking agents and tell the developer exactly what to build.
 
 ## Philosophy
 
@@ -68,6 +68,18 @@ For each area, find what exists and what's missing:
 - Is configuration changeable via API?
 - Does the product ship an MCP server?
 
+### Dev Readiness
+- Do errors return structured JSON with type, code, message, and failing parameter?
+- Do mutating endpoints accept an idempotency key?
+- Is pagination cursor-based with `has_more`?
+- Is the API versioned with a deprecation policy?
+- Is there a published OpenAPI spec?
+- Is there a test mode with separate keys and fixtures?
+- Does `/llms.txt` exist with curated technical content?
+- If there's an MCP server, is the tool surface curated (10-15 tools)?
+- If there's an A2A Agent Card, does it declare capabilities and auth?
+- How many steps from zero to first working API call?
+
 ## Step 3: Report
 
 ```
@@ -98,6 +110,11 @@ For each area, find what exists and what's missing:
 **Blocks agents:** [specific friction]
 **Build:** [specific fix]
 
+### Dev Readiness
+**Today:** [what exists — error quality, idempotency, pagination, versioning, docs, SDKs, test mode, MCP quality, A2A]
+**Blocks integration:** [specific friction]
+**Build:** [specific fix]
+
 ## Hard Blockers
 - [things that completely prevent agent use — fix these first]
 
@@ -122,6 +139,8 @@ For each item: what to build, effort, dependency, and who does it well today.
 Read [maturity.md](references/maturity.md) for levels 0-4 (Agent-Hostile to Agent-First) and how to assess where the product sits.
 Read [checklist.md](references/checklist.md) for the full readiness checklist.
 Read [emerging-standards.md](references/emerging-standards.md) for standards to watch (Stripe Projects, Web Bot Auth, MCP, A2A, x402).
+
+For dev readiness (API quality, errors, idempotency, pagination, versioning, docs, test mode, MCP/A2A quality), see the dedicated `/agent-serve-dev-ready` skill.
 
 ## Important Rules
 
