@@ -5,42 +5,23 @@ Make your product self-serve for AI agents.
 ## Install
 
 ```bash
-# Everything (full audit + all 6 focused skills)
 npx skills add katrinalaszlo/agent-serve
-
-# Or just the area you need
-npx skills add katrinalaszlo/agent-serve --skill agent-serve-onboarding
-npx skills add katrinalaszlo/agent-serve --skill agent-serve-auth
-npx skills add katrinalaszlo/agent-serve --skill agent-serve-purchasing
-npx skills add katrinalaszlo/agent-serve --skill agent-serve-usage
-npx skills add katrinalaszlo/agent-serve --skill agent-serve-self-management
-npx skills add katrinalaszlo/agent-serve --skill agent-serve-dev-ready
 ```
 
 ## What this is
 
-A set of Claude Code skills that find what's blocking agents from using your product and tell you exactly what to build to fix it.
+A skill that finds what's blocking agents from using your product and tells you exactly what to build to fix it.
 
 Agents are becoming buyers. If they can't sign up, authenticate, pay, and use your product programmatically, they'll route spend to competitors that let them self-serve.
 
-## Skills
-
-| Skill | Command | The question it answers |
-|-------|---------|------------------------|
-| **Full audit** | `/agent-serve` | Can agents buy and use your product end-to-end? |
-| **Onboarding** | `/agent-serve-onboarding` | Can an agent create an account without a browser? |
-| **Auth** | `/agent-serve-auth` | Can an agent prove identity without human ceremony? |
-| **Purchasing** | `/agent-serve-purchasing` | Can an agent select a plan and pay via API? |
-| **Usage** | `/agent-serve-usage` | Can an agent track its own consumption? |
-| **Self-Management** | `/agent-serve-self-management` | Can an agent change plans or cancel without a human? |
-| **Dev Ready** | `/agent-serve-dev-ready` | Is your API good to build against? |
-
-Each skill works in two modes:
+## Usage
 
 ```bash
-/agent-serve-auth https://example.com    # Audit a live product
-/agent-serve-auth                        # Audit from codebase
+/agent-serve https://example.com    # Audit a live product
+/agent-serve                        # Audit from codebase
 ```
+
+One command audits all six areas: onboarding, auth, purchasing, usage monitoring, self-management, and dev readiness.
 
 ## What you get
 

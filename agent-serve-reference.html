@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>agent-serve — Full Reference</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #e5e5e5;
+    --accent: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #f5f5f4;
+    --warn-bg: #fef3c7;
+    --warn-border: #f59e0b;
+    --green-bg: #ecfdf5;
+    --green-border: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--fg);
+    background: var(--bg);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  h1 { font-size: 1.8rem; margin: 2rem 0 0.5rem; letter-spacing: -0.02em; }
+  h2 { font-size: 1.35rem; margin: 2.5rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--border); }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+  h4 { font-size: 0.95rem; margin: 1.2rem 0 0.4rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  p { margin: 0.5rem 0; }
+  ul, ol { margin: 0.5rem 0 0.5rem 1.5rem; }
+  li { margin: 0.2rem 0; }
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+  }
+  pre {
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+    font-size: 0.85em;
+    line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.9em;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  th { font-weight: 600; background: var(--code-bg); }
+  tr:hover { background: var(--accent-bg); }
+  .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 1.5rem; }
+  .skill-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1rem 0;
+    background: white;
+  }
+  .skill-card h3 { margin-top: 0; color: var(--accent); }
+  .skill-card .question { font-style: italic; color: var(--muted); margin-bottom: 0.5rem; }
+  .checklist { list-style: none; margin-left: 0; }
+  .checklist li { padding: 0.3rem 0; padding-left: 1.5rem; position: relative; }
+  .checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--muted); }
+  .blocker { background: var(--warn-bg); border-left: 3px solid var(--warn-border); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; margin: 0.5rem 0; }
+  .gold { background: var(--green-bg); border-left: 3px solid var(--green-border); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; margin: 0.5rem 0; }
+  .toc { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
+  .toc ul { list-style: none; margin: 0; }
+  .toc li { padding: 0.2rem 0; }
+  .toc a { text-decoration: none; color: var(--accent); }
+  .toc a:hover { text-decoration: underline; }
+  a { color: var(--accent); }
+  .section-divider { border: none; border-top: 3px solid var(--accent); margin: 3rem 0; opacity: 0.3; }
+  .dim-label { display: inline-block; background: var(--accent-bg); color: var(--accent); font-size: 0.75rem; font-weight: 600; padding: 0.15em 0.5em; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+  .new-badge { display: inline-block; background: #dcfce7; color: #166534; font-size: 0.7rem; font-weight: 600; padding: 0.15em 0.5em; border-radius: 3px; text-transform: uppercase; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>agent-serve</h1>
+<p class="subtitle">Make your product self-serve for AI agents. Everything the skills recommend, in one readable reference.</p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ul>
+<li><a href="#overview">Overview &amp; Skills</a></li>
+<li><a href="#onboarding">1. Onboarding</a></li>
+<li><a href="#auth">2. Authentication</a></li>
+<li><a href="#purchasing">3. Purchasing</a></li>
+<li><a href="#usage">4. Usage Monitoring</a></li>
+<li><a href="#management">5. Self-Management</a></li>
+<li><a href="#dev-ready">6. Dev Readiness</a> <span class="new-badge">New</span></li>
+<li><a href="#mcp">MCP Server Design</a></li>
+<li><a href="#a2a">A2A Protocol</a></li>
+<li><a href="#agent-toolkit">Agent Toolkit Pattern</a></li>
+<li><a href="#checklist">Full Checklist</a></li>
+<li><a href="#scoring">Scoring Rubrics</a></li>
+<li><a href="#maturity">Maturity Model</a></li>
+<li><a href="#standards">Emerging Standards</a></li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="overview">Overview</h2>
+
+<p>Agents are becoming buyers. If they can't sign up, authenticate, pay, and use your product programmatically, they'll route spend to competitors that let them self-serve.</p>
+
+<p>One command &mdash; <code>/agent-serve</code> &mdash; audits a SaaS product across six areas and tells the developer exactly what to build.</p>
+
+<table>
+<tr><th>Area</th><th>The question it answers</th></tr>
+<tr><td><strong>Onboarding</strong></td><td>Can an agent create an account without a browser?</td></tr>
+<tr><td><strong>Auth</strong></td><td>Can an agent prove identity without human ceremony?</td></tr>
+<tr><td><strong>Purchasing</strong></td><td>Can an agent select a plan and pay via API?</td></tr>
+<tr><td><strong>Usage</strong></td><td>Can an agent track its own consumption?</td></tr>
+<tr><td><strong>Self-Management</strong></td><td>Can an agent change plans or cancel without a human?</td></tr>
+<tr><td><strong>Dev Readiness</strong></td><td>Is your API good to build against?</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="onboarding">1. Onboarding</h2>
+<p><em>Can an agent create an account without a browser?</em></p>
+
+<p>If signup requires a browser, email click, or phone number, agents can't onboard. They'll route to competitors that let them self-serve.</p>
+
+<h3>What to Check</h3>
+<ul>
+<li>Does a <code>POST /signup</code> or <code>POST /accounts</code> endpoint exist?</li>
+<li>Does it require browser interaction (CAPTCHA, email click, phone verification)?</li>
+<li>How many steps from zero to "has an account with API access"?</li>
+<li>Is there a sandbox/trial mode accessible without approval?</li>
+<li>Can agents provision immediately and claim later (deploy-first-claim-later)?</li>
+</ul>
+
+<h3>What Blocks Agents</h3>
+<table>
+<tr><th>Anti-Pattern</th><th>Why It Kills Agents</th><th>Fix</th></tr>
+<tr><td>CAPTCHA</td><td>Browser fingerprinting, behavioral scoring</td><td>Web Bot Auth (RFC 9421 profile), IP reputation, proof-of-work</td></tr>
+<tr><td>Email verification</td><td>Agent has no inbox</td><td>OAuth Client Credentials, domain verification</td></tr>
+<tr><td>SMS OTP</td><td>Requires phone</td><td>TOTP (agent can compute), or skip for API-only access</td></tr>
+<tr><td>Manual approval queues</td><td>"We'll review your application"</td><td>Self-serve provisioning API</td></tr>
+<tr><td>Multi-step browser wizards</td><td>No headless path</td><td>Single API call signup</td></tr>
+<tr><td>Device fingerprinting</td><td>Headless Chrome gets blocked</td><td>Web Bot Auth, allowlist verified agents</td></tr>
+</table>
+
+<h3>Gold Standards</h3>
+<div class="gold">
+<strong>Cloudflare (2026):</strong> Agents create accounts, buy domains, start paid subscriptions, deploy apps. Zero manual steps beyond ToS acceptance. REST/JSON catalog, identity attestation + OAuth, tokenized payment with configurable spend cap.
+</div>
+<div class="gold">
+<strong>Stripe Projects:</strong> Agents get scoped API keys per project with explicit capabilities (read billing, create charges up to threshold). GA since April 2026 with 32 providers.
+</div>
+
+<h3>Deploy-First-Claim-Later Pattern</h3>
+<p>The most agent-friendly onboarding pattern: let agents provision immediately, require identity later.</p>
+<ul>
+<li><strong>Netlify:</strong> <code>netlify deploy --allow-anonymous</code> — 1-hour claim window</li>
+<li><strong>Prisma:</strong> <code>npx create-db</code> — 24-hour claim window, free permanent tier if claimed</li>
+</ul>
+<p>Pattern: <code>POST /v1/provision</code> returns scoped credentials + TTL. No signup gate.</p>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="auth">2. Authentication</h2>
+<p><em>Can an agent prove identity without human ceremony?</em></p>
+
+<p>Machine-to-machine auth must work without human interaction. If auth requires a browser click, email link, or phone call, agents can't authenticate.</p>
+
+<h3>Auth Hierarchy (best to worst for agents)</h3>
+<ol>
+<li>API keys with scopes (simplest, most agents support)</li>
+<li>OAuth Client Credentials (enterprise-grade, short-lived tokens)</li>
+<li>Service accounts with key pairs (GCP model, secure but complex)</li>
+<li>OAuth Authorization Code + PKCE (requires browser, but possible)</li>
+<li>Magic links / email OTP (agent-hostile)</li>
+<li>CAPTCHA-gated (agent-impossible)</li>
+</ol>
+
+<h3>What Blocks Agents</h3>
+<table>
+<tr><th>Anti-Pattern</th><th>Why It Kills Agents</th><th>Fix</th></tr>
+<tr><td>Magic links</td><td>Requires email inbox + browser click</td><td>API key or Client Credentials</td></tr>
+<tr><td>SMS OTP</td><td>Requires phone</td><td>TOTP (agent can compute)</td></tr>
+<tr><td>Browser-only OAuth consent</td><td>Click "Allow" screen</td><td>Client Credentials Grant</td></tr>
+<tr><td>Device fingerprinting</td><td>Headless browsers flagged</td><td>Web Bot Auth (RFC 9421), allowlist</td></tr>
+<tr><td>IP allowlisting without API</td><td>Can't self-manage access</td><td>API to manage IP allowlist</td></tr>
+<tr><td>Session cookies only</td><td>No API token alternative</td><td>Add bearer token auth path</td></tr>
+</table>
+
+<h3>Gold Standards</h3>
+<div class="gold">
+<strong>OAuth 2.0 Client Credentials:</strong> Machine-to-machine auth. No user interaction. Short-lived tokens. <code>POST /oauth/token</code> with <code>grant_type=client_credentials</code>.
+</div>
+<div class="gold">
+<strong>Stripe API Keys:</strong> Secret key for server-side, restricted keys with granular permissions, key rotation via API, test mode keys for sandbox.
+</div>
+<div class="gold">
+<strong>Web Bot Auth:</strong> Profile of RFC 9421 (HTTP Message Signatures) for bot authentication. Agents register public keys in a well-known directory; WAFs verify identity without CAPTCHA. Live at Cloudflare, AWS WAF, Vercel, Shopify, Akamai.
+</div>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="purchasing">3. Purchasing</h2>
+<p><em>Can an agent select a plan and pay via API?</em></p>
+
+<p>If purchasing requires a browser checkout page or "contact sales," agents can't buy. They need plan catalog + payment method + subscription creation — all via API.</p>
+
+<h3>The Pattern (works now, no special programs)</h3>
+<p>Most SaaS already uses Stripe. The fix is usually "expose what Stripe already supports as API endpoints."</p>
+<ol>
+<li>Expose <code>GET /v1/plans</code> returning plan IDs, prices, features, limits</li>
+<li>Accept <code>POST /v1/subscriptions</code> with plan_id + payment_method</li>
+<li>Accept <code>payment_method</code> (<code>pm_...</code>) — attach to customer, then subscribe. No browser.</li>
+<li>Fall back to 402 + checkout URL only when no payment method provided</li>
+<li>Use Stripe Payment Intents API (not Checkout Sessions) for programmatic payment</li>
+</ol>
+
+<h3>What Blocks Agents</h3>
+<table>
+<tr><th>Anti-Pattern</th><th>Why It Kills Agents</th><th>Fix</th></tr>
+<tr><td>"Contact sales" gates</td><td>No self-serve path</td><td>Add API-accessible tier</td></tr>
+<tr><td>Browser-only Stripe Checkout</td><td>Redirect flow, no API</td><td>Stripe Payment Intents API</td></tr>
+<tr><td>Manual invoice / PO process</td><td>Requires human</td><td>Programmatic billing via Stripe</td></tr>
+<tr><td>Pricing hidden behind demo</td><td>Agent can't evaluate</td><td>Publish pricing.json</td></tr>
+<tr><td>Enterprise-only tiers</td><td>No self-serve option</td><td>Add developer/starter tier</td></tr>
+<tr><td>Annual contracts only</td><td>Agents need flexibility</td><td>Monthly or usage-based option</td></tr>
+</table>
+
+<h3>Tokenized Payments (2026)</h3>
+<p><strong>Saved payment methods (<code>pm_...</code>)</strong> — the familiar Stripe pattern. Human saves a card via Setup Intent, agent reuses it. Works today, locked to one merchant.</p>
+<p><strong>Shared Payment Tokens (SPTs)</strong> — time-limited, scoped to a specific business, revocable. Work cross-merchant via Link wallet.</p>
+<p><strong>Issuing for agents</strong> — actual virtual card numbers with per-transaction spend controls and real-time authorization.</p>
+<p>For most SaaS: accept saved <code>pm_...</code> via your API first. SPTs and virtual cards will flow in from agents that already have them.</p>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="usage">4. Usage Monitoring</h2>
+<p><em>Can an agent track its own consumption?</em></p>
+
+<p>If usage data lives only in a dashboard or monthly email invoices, agents can't self-throttle, budget, or react to limits.</p>
+
+<h3>What to Check</h3>
+<ul>
+<li>Do API responses include rate limit headers (<code>x-ratelimit-remaining-*</code>, <code>x-ratelimit-reset-*</code>)?</li>
+<li>Is there a dedicated usage API (<code>GET /v1/usage</code>) with current-period data?</li>
+<li>Is there a billing/invoice API?</li>
+<li>Can agents see quotas and how close they are to limits?</li>
+<li>Are there webhooks for threshold events (80% quota, overage, billing failure)?</li>
+</ul>
+
+<h3>Gold Standards</h3>
+<div class="gold">
+<strong>OpenAI:</strong> Every response includes <code>x-ratelimit-limit-requests</code>, <code>x-ratelimit-remaining-requests</code>, <code>x-ratelimit-limit-tokens</code>, <code>x-ratelimit-remaining-tokens</code>, <code>x-ratelimit-reset-*</code>. Plus dedicated <code>GET /v1/usage</code>.
+</div>
+<div class="gold">
+<strong>Twilio:</strong> Usage Records API with filtering by category, date range. Daily/monthly/all-time granularity. Includes cost per resource type.
+</div>
+
+<h3>Minimum Viable Usage API</h3>
+<pre><code>GET /v1/usage
+{
+  "period": "2026-05",
+  "requests": 45230,
+  "limit": 100000,
+  "cost_usd": 23.45,
+  "projected_cost_usd": 52.10,
+  "usage_by_endpoint": {...}
+}</code></pre>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="management">5. Self-Management</h2>
+<p><em>Can an agent change plans or cancel without a human?</em></p>
+
+<p>Full self-management means every action available via API. If plan changes require "contact support" or settings live only in a dashboard, agents can't manage their lifecycle.</p>
+
+<h3>What Blocks Agents</h3>
+<table>
+<tr><th>Anti-Pattern</th><th>Why It Kills Agents</th><th>Fix</th></tr>
+<tr><td>"Contact support to cancel"</td><td>No self-serve path</td><td><code>DELETE /v1/subscriptions/{id}</code></td></tr>
+<tr><td>"Contact support to downgrade"</td><td>Requires human</td><td><code>PATCH /v1/subscriptions/{id}</code></td></tr>
+<tr><td>Dashboard-only settings</td><td>No API</td><td>REST API or MCP server for config</td></tr>
+<tr><td>Dashboard-only team management</td><td>Requires admin UI</td><td>Team/seat management API</td></tr>
+<tr><td>No data portability API</td><td>Agent can't export</td><td>Data export endpoint</td></tr>
+<tr><td>Contract-gated plan changes</td><td>Requires amendment</td><td>Self-serve with proration</td></tr>
+</table>
+
+<div class="gold">
+<strong>Stripe Subscriptions API:</strong> Full lifecycle — <code>POST</code> (create), <code>PATCH</code> (change plan/quantity), <code>DELETE</code> (cancel). Proration handled automatically. Dunning/retry built in.
+</div>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="dev-ready">6. Dev Readiness <span class="new-badge">New</span></h2>
+<p><em>Is your API good to build against?</em></p>
+
+<p>Access gates (signup, auth, billing) are necessary but not sufficient. If the API has vague errors, no retry safety, missing pagination, or no test mode, agents fail at integration even after they get in. Developers give up. Both route to competitors with better DX.</p>
+
+<p><strong>Good DX serves humans today and agents tomorrow.</strong> Agents have zero tolerance for ambiguity, undocumented behavior, and human-only flows. The same improvements that help agents self-correct on errors also help developers debug faster.</p>
+
+<h3>What to Check</h3>
+
+<h4>Error Responses</h4>
+<ul>
+<li>Do errors return structured JSON (not HTML 500 pages)?</li>
+<li>Is the format RFC 9457 Problem Details, or at minimum: type/code, message, which parameter failed?</li>
+<li>Do errors include agent-actionable fields: <code>is_retriable</code>, <code>retry_after_seconds</code>, <code>documentation_url</code>?</li>
+<li>Is there a request ID on every response (<code>X-Request-Id</code>) for tracing?</li>
+<li>Do 429 responses include <code>Retry-After</code> with specific backoff?</li>
+</ul>
+
+<h4>Idempotency</h4>
+<ul>
+<li>Do mutating endpoints (POST/PATCH/DELETE) accept an <code>Idempotency-Key</code> header?</li>
+<li>What's the dedup window? (24 hours minimum)</li>
+<li>Are responses identical on replay (same status code, same body)?</li>
+<li>Is there a reconciliation path (lookup-by-client-reference)?</li>
+</ul>
+
+<h4>Pagination</h4>
+<ul>
+<li>Do list endpoints paginate?</li>
+<li>Is pagination cursor-based (stable across mutations) or offset-based (breaks when items change)?</li>
+<li>Does the response include <code>has_more</code> or equivalent?</li>
+</ul>
+
+<h4>Versioning</h4>
+<ul>
+<li>Is the API versioned? Can clients pin a version (header or URL)?</li>
+<li>Is there a deprecation policy with timeline (minimum 12 months)?</li>
+<li>Do breaking changes get announced before they ship?</li>
+</ul>
+
+<h4>OpenAPI Spec</h4>
+<ul>
+<li>Is there a published OpenAPI spec? Is it complete?</li>
+<li>Are all enum values, field constraints, and parameter formats documented?</li>
+<li>Are operation IDs descriptive and action-oriented (<code>createInvoice</code> not <code>postData</code>)?</li>
+</ul>
+
+<h4>Documentation &amp; Discoverability</h4>
+<ul>
+<li>Does <code>/llms.txt</code> exist with curated technical content?</li>
+<li>Does <code>/llms-full.txt</code> exist with complete embedded documentation?</li>
+<li>Do docs include runnable code examples (not pseudocode)?</li>
+<li>Is there an API explorer / playground?</li>
+</ul>
+
+<h4>SDKs &amp; Time-to-First-Call</h4>
+<ul>
+<li>Are there official SDKs? In which languages?</li>
+<li>Is there a quickstart: zero to first working request in under 5 minutes?</li>
+<li>How many steps from install to first successful API call?</li>
+<li>Is there a CLI scaffolding tool (<code>npx create-*</code> pattern)?</li>
+</ul>
+
+<h4>Test Mode / Sandbox</h4>
+<ul>
+<li>Is there a test mode with separate keys (<code>sk_test_*</code> pattern)?</li>
+<li>Are there test fixtures / magic values (test card numbers, test phone numbers)?</li>
+<li>Can test environments be provisioned and torn down programmatically?</li>
+<li>Is test data isolated from production?</li>
+</ul>
+
+<h3>What Blocks Integration</h3>
+<table>
+<tr><th>Anti-Pattern</th><th>Why It Kills Agents</th><th>Why It Kills Developers</th><th>Fix</th></tr>
+<tr><td>HTML error pages</td><td>Unparseable</td><td>Hard to debug</td><td>Structured JSON with type + code</td></tr>
+<tr><td><code>{"error": "something went wrong"}</code></td><td>Can't self-correct</td><td>No actionable info</td><td>Include code, param, suggestion</td></tr>
+<tr><td>No request IDs</td><td>Can't trace failures</td><td>Support can't help</td><td><code>X-Request-Id</code> on every response</td></tr>
+<tr><td>No idempotency</td><td>Retries cause duplicates</td><td>Manual dedup logic</td><td><code>Idempotency-Key</code> header</td></tr>
+<tr><td>Offset pagination</td><td>Skips/duplicates items</td><td>Inconsistent data</td><td>Cursor-based with <code>has_more</code></td></tr>
+<tr><td>Unversioned API</td><td>Silent breakage</td><td>Unexpected regressions</td><td>Pinnable versions + deprecation</td></tr>
+<tr><td>No test mode</td><td>Must use production</td><td>Risk of real charges</td><td>Test keys + test fixtures</td></tr>
+<tr><td>No OpenAPI spec</td><td>Can't auto-discover</td><td>Manual integration</td><td>Publish and version the spec</td></tr>
+<tr><td>100-tool MCP server</td><td>Can't select right tool</td><td>Overwhelming</td><td>Curate to 10-15 tools</td></tr>
+<tr><td>No <code>Retry-After</code> on 429</td><td>Guesses, gets banned</td><td>Trial-and-error</td><td>Specific seconds in header</td></tr>
+</table>
+
+<h3>Gold Standards</h3>
+
+<div class="gold">
+<strong>Stripe Error Responses:</strong>
+<pre><code>{
+  "error": {
+    "type": "card_error",
+    "code": "card_declined",
+    "decline_code": "insufficient_funds",
+    "message": "Your card has insufficient funds.",
+    "param": "payment_method"
+  }
+}</code></pre>
+<p>Why it works: <code>type</code> = category, <code>code</code> = machine-parseable, <code>param</code> = which field to fix. Every response includes <code>Request-Id</code>.</p>
+</div>
+
+<div class="gold">
+<strong>Stripe Idempotency:</strong> <code>Idempotency-Key</code> header on POST/PATCH/DELETE. 24-hour dedup window. Replay returns original response. Agents operate in unreliable environments — with idempotency, retry is always safe.
+</div>
+
+<div class="gold">
+<strong>Stripe Versioning:</strong> <code>Stripe-Version: 2024-04-10</code>. Account pins at signup. Old versions supported for years. Agents pin a version and never break.
+</div>
+
+<div class="gold">
+<strong>Cursor Pagination:</strong> <code>GET /v1/customers?limit=10&starting_after=cus_abc123</code> → <code>{ "data": [...], "has_more": true }</code>. Offset breaks when items change between pages.
+</div>
+
+<h3>Time-to-First-Call</h3>
+<p>The north star metric. How many steps from zero to a working API request?</p>
+<table>
+<tr><th>Product</th><th>Steps</th><th>Time</th><th>What Makes It Fast</th></tr>
+<tr><td>Stripe</td><td>3</td><td>~2 min</td><td>Signup → test key in dashboard → curl with key</td></tr>
+<tr><td>CopilotKit</td><td>4</td><td>~2 min</td><td>CLI scaffolding → set env var → npm install → run</td></tr>
+<tr><td>Twilio</td><td>4</td><td>~5 min</td><td>Signup → trial number → install SDK → send SMS</td></tr>
+</table>
+
+<h3>Minimum Viable DX Checklist</h3>
+<p>The smallest set of changes that makes an API dev-ready for humans AND agents:</p>
+<ol>
+<li><strong>Structured errors</strong> — JSON with type, code, message, param</li>
+<li><strong>Request IDs</strong> — <code>X-Request-Id</code> on every response</li>
+<li><strong>Idempotency</strong> — <code>Idempotency-Key</code> on POST/PATCH/DELETE</li>
+<li><strong>Cursor pagination</strong> — <code>starting_after</code> + <code>has_more</code></li>
+<li><strong>API versioning</strong> — pin via header, deprecation policy</li>
+<li><strong>OpenAPI spec</strong> — complete, versioned, published</li>
+<li><strong>Test mode</strong> — separate keys, test fixtures, isolated</li>
+<li><strong>Retry-After</strong> — on 429 responses with specific backoff</li>
+<li><strong>llms.txt</strong> — curated technical content at domain root</li>
+<li><strong>Quickstart</strong> — zero to first API call in under 5 minutes</li>
+</ol>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="mcp">MCP Server Design</h2>
+<p><em>Patterns for building agent-facing MCP servers that don't suck.</em></p>
+
+<h3>Tool Naming</h3>
+<p>Use <code>{service}_{action}_{resource}</code> in snake_case. Example: <code>slack_send_message</code> not <code>send_message</code>. Service prefix avoids collisions when multiple MCP servers operate together.</p>
+
+<h3>Tool Descriptions</h3>
+<p>Write for AI agents, not humans. "Use this when the user wants to view a customer's billing history" beats "Gets billing data." This is the single most important factor in whether agents select the right tool.</p>
+
+<h3>Curated Tool Surface</h3>
+<div class="blocker">
+<strong>Anti-pattern:</strong> Auto-generating one MCP tool per API endpoint for a 200-endpoint API. Agents facing 100+ tools cannot reliably select the right one. Tool descriptions count as input tokens on every request.
+</div>
+<p>A focused set of 10-15 well-designed tools beats a full API dump. Cloudflare's approach for large APIs: two tools (<code>search()</code> and <code>execute()</code>) where the model writes code against a typed representation of the API spec.</p>
+
+<h3>Error Handling</h3>
+<p>Report tool errors within result objects (<code>isError: true</code> in content), NOT as MCP protocol-level errors. This allows the LLM to see and recover from errors. Input validation errors should also be Tool Execution Errors to enable model self-correction.</p>
+
+<h3>Pagination</h3>
+<p>Cursor-based with <code>has_more</code>/<code>next_cursor</code>. Default 20-50 items per response. Offer both <code>list</code> (recent) and <code>search</code> (filtered) tools — agents struggle with multi-page iteration but excel at describing search criteria.</p>
+
+<h3>Tool Annotations</h3>
+<p>Provide <code>readOnlyHint</code>, <code>destructiveHint</code>, <code>idempotentHint</code>, <code>openWorldHint</code>. Hints for agents and permission systems to make safe decisions.</p>
+
+<h3>Authentication</h3>
+<p>OAuth 2.1 with PKCE is required for remote public MCP servers. For internal/personal servers, static Bearer tokens or API keys are acceptable.</p>
+
+<h3>MCP ↔ OpenAPI</h3>
+<p>MCP quality is capped by underlying API/OpenAPI quality. Auto-generation tools handle mechanical translation — but vague operation IDs become vague tool names, missing parameter descriptions become agent hallucinations. <strong>Good MCP servers start from good APIs with comprehensive OpenAPI specs.</strong></p>
+
+<p>Who ships MCP servers today: Stripe, Supabase, Cloudflare, Sentry, Expo, Hugging Face.</p>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="a2a">A2A Protocol</h2>
+<p><em>Google's Agent-to-Agent protocol. Donated to Linux Foundation in 2025.</em></p>
+
+<p>Major supporting organizations: AWS, Cisco, Google, IBM, Microsoft, Salesforce, SAP.</p>
+
+<h3>Agent Card</h3>
+<p>Every A2A-compatible agent publishes a machine-readable JSON Agent Card:</p>
+<pre><code>{
+  "name": "Billing Agent",
+  "description": "Manages subscriptions and invoices",
+  "provider": { "organization": "Acme Corp" },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false
+  },
+  "skills": [
+    { "name": "manage_subscription",
+      "description": "Create, update, or cancel subscriptions" }
+  ],
+  "securitySchemes": ["apiKey", "oauth2"],
+  "signature": "sha256:base64..."
+}</code></pre>
+
+<h3>Task Lifecycle</h3>
+<p><code>SUBMITTED</code> → <code>WORKING</code> → <code>COMPLETED</code> / <code>FAILED</code> / <code>CANCELED</code> / <code>REJECTED</code></p>
+<p>Two interrupted states: <code>INPUT_REQUIRED</code> (needs clarification) and <code>AUTH_REQUIRED</code> (needs authentication). Terminal states close the task; interrupted states allow resumption.</p>
+
+<h3>Layering</h3>
+<div class="blocker">
+A2A sits on top of APIs and MCP. Don't recommend A2A unless the product already has solid APIs. The progression: <strong>REST API → MCP server → A2A Agent Card</strong>.
+</div>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="agent-toolkit">Agent Toolkit Pattern</h2>
+<p><em>How to build an SDK for AI agent frameworks.</em></p>
+
+<div class="gold">
+<strong>Stripe Agent Toolkit (<code>@stripe/agent-toolkit</code>):</strong>
+<ul>
+<li><strong>Curated operations</strong> — not the full API surface. 10-15 operations for autonomous use.</li>
+<li><strong>Framework-native</strong> — works with OpenAI Agents SDK, Vercel AI SDK, LangChain, CrewAI. <code>toolkit.get_tools()</code> returns framework-compatible definitions.</li>
+<li><strong>Permission scoping</strong> — restricted API keys (<code>rk_*</code>) limit agent access. Read-only mode is trivial.</li>
+<li><strong>Sandbox-first</strong> — test in sandbox before production. Agent behavior is non-deterministic.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="checklist">Full Checklist</h2>
+
+<h4>Access Gates</h4>
+<ul class="checklist">
+<li>Account creation via API (no browser, no email verification required)</li>
+<li>OAuth Client Credentials Grant supported</li>
+<li>API keys with granular scopes + rotation endpoint</li>
+<li>Plan catalog exposed as JSON (<code>GET /plans</code>)</li>
+<li>Subscription creation via API with programmatic payment</li>
+<li>Usage API with current-period data</li>
+<li>Rate limit headers on all responses</li>
+<li>Billing/invoice API</li>
+<li>Threshold webhooks (quota, overage)</li>
+<li>Plan upgrade/downgrade via API</li>
+<li>Cancel via API</li>
+<li>Configuration via API (not dashboard-only)</li>
+<li>MCP server for agent interaction</li>
+<li>OpenAPI spec (complete, versioned)</li>
+<li>No CAPTCHA on any programmatic path</li>
+<li>No "contact sales" gates on any tier</li>
+</ul>
+
+<h4>Dev Readiness</h4>
+<ul class="checklist">
+<li>Structured JSON error responses with type, code, message, and failing parameter</li>
+<li>Request ID (<code>X-Request-Id</code>) on every response</li>
+<li>Idempotency key support on mutating endpoints (POST/PATCH/DELETE)</li>
+<li>Cursor-based pagination on list endpoints with <code>has_more</code></li>
+<li>API versioned with pinnable versions and deprecation policy</li>
+<li>Test mode with separate keys and fixtures</li>
+<li><code>/llms.txt</code> with curated technical content</li>
+<li>Quickstart: zero to first API call in under 5 minutes</li>
+<li>MCP tool surface curated (10-15 tools, not full API dump)</li>
+<li>MCP tool descriptions written for AI agents ("Use this when..." phrasing)</li>
+<li>A2A Agent Card at well-known URL (if exposing agent-to-agent capabilities)</li>
+</ul>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="scoring">Scoring Rubrics</h2>
+<p>Score between anchor points (0, 3, 5, 8, 10) by interpolating.</p>
+
+<h3>Onboarding (0-10)</h3>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>0</td><td>Browser-only signup with CAPTCHA</td></tr>
+<tr><td>3</td><td>API signup exists but requires email verification loop</td></tr>
+<tr><td>5</td><td>API signup with instant access, but limited (needs manual upgrade)</td></tr>
+<tr><td>8</td><td>Full API onboarding, instant access, sandbox/trial included</td></tr>
+<tr><td>10</td><td>Agent provisions itself completely (Cloudflare model)</td></tr>
+</table>
+
+<h3>Authentication (0-10)</h3>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>0</td><td>SSO-only or magic-link-only, no API auth path</td></tr>
+<tr><td>3</td><td>API keys exist but require human to generate in dashboard</td></tr>
+<tr><td>5</td><td>API keys + scoped permissions, but no machine-to-machine OAuth</td></tr>
+<tr><td>8</td><td>Client Credentials Grant + scoped API keys + key rotation API</td></tr>
+<tr><td>10</td><td>Full programmatic identity with cryptographic attestation</td></tr>
+</table>
+
+<h3>Purchasing (0-10)</h3>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>0</td><td>"Contact sales" only</td></tr>
+<tr><td>3</td><td>Self-serve pricing page but payment requires browser checkout</td></tr>
+<tr><td>5</td><td>Stripe Checkout with direct link (semi-programmatic)</td></tr>
+<tr><td>8</td><td>Full billing API — plan catalog, Stripe Subscriptions + saved payment method</td></tr>
+<tr><td>10</td><td>8 + machine-readable pricing (pricing.json) + spending policies + agent self-serve</td></tr>
+</table>
+
+<h3>Usage Monitoring (0-10)</h3>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>0</td><td>Dashboard-only, no API for usage data</td></tr>
+<tr><td>3</td><td>Basic rate limit headers but no usage API</td></tr>
+<tr><td>5</td><td>Usage API exists but limited (daily aggregates only)</td></tr>
+<tr><td>8</td><td>Real-time usage + billing API + threshold webhooks</td></tr>
+<tr><td>10</td><td>Full observability (OpenAI model: per-request tokens + cost)</td></tr>
+</table>
+
+<h3>Self-Management (0-10)</h3>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>0</td><td>All management requires dashboard or support ticket</td></tr>
+<tr><td>3</td><td>Some settings via API, but plan changes require human</td></tr>
+<tr><td>5</td><td>Plan changes via API, but cancel requires support</td></tr>
+<tr><td>8</td><td>Full lifecycle management via API</td></tr>
+<tr><td>10</td><td>Complete self-serve + MCP server for agent interaction</td></tr>
+</table>
+
+<h3>Dev Readiness (0-10) <span class="new-badge">New</span></h3>
+<table>
+<tr><th>Score</th><th>Meaning</th></tr>
+<tr><td>0</td><td>HTML errors, no docs, no test mode, no versioning</td></tr>
+<tr><td>3</td><td>JSON errors but generic, basic docs exist, no idempotency</td></tr>
+<tr><td>5</td><td>Structured errors + OpenAPI spec + some test mode, but no idempotency or versioning</td></tr>
+<tr><td>8</td><td>Full error model + idempotency + cursor pagination + versioned API + test mode + SDK + llms.txt</td></tr>
+<tr><td>10</td><td>8 + time-to-first-call under 5 min + curated MCP server + agent toolkit (if applicable) + A2A Agent Card (if applicable)</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="maturity">Maturity Model</h2>
+
+<h3>Level 0: Agent-Hostile</h3>
+<ul><li>Browser-only everything</li><li>No API</li><li>CAPTCHA + email verification</li><li>"Contact sales" for pricing</li></ul>
+
+<h3>Level 1: API Exists</h3>
+<ul><li>REST API for core product features</li><li>API keys (manually generated)</li><li>Docs available online</li><li>But: no programmatic signup, billing, or management</li></ul>
+
+<h3>Level 2: Agent-Possible</h3>
+<ul><li>API signup (with some friction)</li><li>API keys with scopes</li><li>Usage visible via API</li><li>Billing still requires dashboard</li></ul>
+
+<h3>Level 3: Agent-Friendly</h3>
+<ul><li>Full programmatic onboarding</li><li>OAuth Client Credentials</li><li>Plan selection + payment via API</li><li>Usage + billing API</li><li>Configuration via API</li></ul>
+
+<h3>Level 4: Agent-First (Gold Standard)</h3>
+<ul><li>Zero-friction agent provisioning</li><li>MCP server as product interface</li><li>Spending policies (human sets guardrails, agent executes)</li><li>Agent identity verification</li><li>Self-serve everything</li><li>Examples: Stripe Projects, Cloudflare (2026)</li></ul>
+
+<h3>Dev Readiness: An Intersecting Dimension</h3>
+<p>The levels above measure <strong>ACCESS</strong> — can agents get in? Dev readiness measures <strong>QUALITY</strong> — is it good once they're in? These are orthogonal.</p>
+<ul>
+<li><strong>Level 3 access + poor dev readiness:</strong> everything is API-accessible but errors are vague, no idempotency, no test mode.</li>
+<li><strong>Level 1 access + great dev readiness:</strong> only core features exposed but the API is beautifully designed.</li>
+</ul>
+<p>At Level 2, dev readiness becomes the differentiator. At Level 3-4, it's table stakes.</p>
+
+<!-- ============================================================ -->
+<hr class="section-divider">
+<h2 id="standards">Emerging Standards</h2>
+
+<table>
+<tr><th>Standard</th><th>What It Is</th><th>Status</th></tr>
+<tr><td><strong>Stripe Projects</strong></td><td>Agent provisioning + billing protocol. Curated marketplace with scoped API keys and virtual cards.</td><td>GA since April 2026, 32 providers</td></tr>
+<tr><td><strong>Web Bot Auth</strong></td><td>Profile of RFC 9421 (HTTP Message Signatures) for bot authentication. WAFs verify identity without CAPTCHA.</td><td>Live at Cloudflare, AWS WAF, Vercel, Shopify, Akamai</td></tr>
+<tr><td><strong>MCP</strong></td><td>Model Context Protocol — standard for agent-tool interaction.</td><td>Anthropic-originated, now Linux Foundation</td></tr>
+<tr><td><strong>A2A</strong></td><td>Agent-to-Agent protocol — discovery + interaction for agents talking to agents.</td><td>Google-originated, now Linux Foundation</td></tr>
+<tr><td><strong>x402</strong></td><td>HTTP 402 micropayment protocol. Pay-per-request without subscription.</td><td>Rails are real (Stripe/USDC/Base). Commercial volume unproven — watch, don't build on volume claims.</td></tr>
+<tr><td><strong>llms.txt</strong></td><td>Markdown file at <code>/llms.txt</code> with curated technical content for AI agents.</td><td>Shipped by Anthropic, Stripe, Cloudflare, Vercel, Supabase</td></tr>
+</table>
+
+<hr style="margin-top: 3rem; border: none; border-top: 1px solid var(--border);">
+<p style="color: var(--muted); font-size: 0.85rem; margin-top: 1rem;">agent-serve by Kat Laszlo — <a href="https://x.com/Katlaszlo">@katlaszlo</a></p>
+
+</body>
+</html>

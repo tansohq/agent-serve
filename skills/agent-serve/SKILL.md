@@ -47,10 +47,14 @@ For each area, find what exists and what's missing:
 - Is there instant sandbox/trial access?
 - Can agents provision immediately (deploy-first-claim-later)?
 
+Read [onboarding-patterns.md](references/onboarding-patterns.md) for gold standards (Cloudflare, Stripe Projects), deploy-first-claim-later examples, and sandbox provisioning patterns.
+
 ### Authentication
 - Do API keys exist? Scoped? Rotatable via API?
 - Is OAuth Client Credentials supported?
 - Are there blockers: magic links, SMS OTP, browser-only OAuth consent?
+
+Read [auth-patterns.md](references/auth-patterns.md) for the auth hierarchy, OAuth Client Credentials flow, Stripe API key model, and Web Bot Auth.
 
 ### Purchasing
 - Is there a JSON plan catalog (`GET /plans`)?
@@ -58,15 +62,22 @@ For each area, find what exists and what's missing:
 - Does checkout require a browser redirect?
 - Is pricing machine-readable (pricing.json)?
 
+Read [purchasing-patterns.md](references/purchasing-patterns.md) for the Stripe Setup Intent + Subscriptions API pattern and tokenized payments.
+Read [pricing-json.md](references/pricing-json.md) for the machine-readable pricing schema.
+
 ### Usage Monitoring
 - Do responses include rate limit headers?
 - Is there a usage API with current-period data?
 - Are there threshold webhooks?
 
+Read [usage-patterns.md](references/usage-patterns.md) for gold standards (OpenAI rate limit headers, Twilio Usage Records API).
+
 ### Self-Management
 - Can plans be changed/canceled via API?
 - Is configuration changeable via API?
 - Does the product ship an MCP server?
+
+Read [self-management-patterns.md](references/self-management-patterns.md) for Stripe Subscriptions API lifecycle and MCP server as management interface.
 
 ### Dev Readiness
 - Do errors return structured JSON with type, code, message, and failing parameter?
@@ -79,6 +90,8 @@ For each area, find what exists and what's missing:
 - If there's an MCP server, is the tool surface curated (10-15 tools)?
 - If there's an A2A Agent Card, does it declare capabilities and auth?
 - How many steps from zero to first working API call?
+
+Read [dev-ready-patterns.md](references/dev-ready-patterns.md) for gold standards (Stripe errors, idempotency, versioning), MCP server design, A2A Agent Card, and time-to-first-call benchmarks.
 
 ## Step 3: Report
 
@@ -139,8 +152,6 @@ For each item: what to build, effort, dependency, and who does it well today.
 Read [maturity.md](references/maturity.md) for levels 0-4 (Agent-Hostile to Agent-First) and how to assess where the product sits.
 Read [checklist.md](references/checklist.md) for the full readiness checklist.
 Read [emerging-standards.md](references/emerging-standards.md) for standards to watch (Stripe Projects, Web Bot Auth, MCP, A2A, x402).
-
-For dev readiness (API quality, errors, idempotency, pagination, versioning, docs, test mode, MCP/A2A quality), see the dedicated `/agent-serve-dev-ready` skill.
 
 ## Important Rules
 
