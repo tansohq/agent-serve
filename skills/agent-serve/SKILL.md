@@ -95,49 +95,84 @@ Read [dev-ready-patterns.md](references/dev-ready-patterns.md) for gold standard
 
 ## Step 3: Report
 
-```
-## Agent-Serve: [product]
+Read [scoring-rubrics.md](references/scoring-rubrics.md) for the 0-10 scoring criteria per area. Score each area using the anchor points in that file.
 
-### Onboarding
+Use this exact format:
+
+```
+# Agent-Serve Audit: [product]
+
+## Scorecard
+
+| Area             | Score | Status                        |
+|------------------|-------|-------------------------------|
+| Onboarding       | X/10  | [one-line summary]            |
+| Authentication   | X/10  | [one-line summary]            |
+| Purchasing       | X/10  | [one-line summary]            |
+| Usage Monitoring | X/10  | [one-line summary]            |
+| Self-Management  | X/10  | [one-line summary]            |
+| Dev Readiness    | X/10  | [one-line summary]            |
+
+**Maturity: Level X — [Agent-Hostile / API Exists / Agent-Possible / Agent-Friendly / Agent-First]**
+
+---
+
+### Onboarding — X/10
 **Today:** [what exists]
 **Blocks agents:** [specific friction]
 **Build:** [specific fix with effort estimate]
 
-### Authentication
+---
+
+### Authentication — X/10
 **Today:** [what exists]
 **Blocks agents:** [specific friction]
 **Build:** [specific fix]
 
-### Purchasing
+---
+
+### Purchasing — X/10
 **Today:** [what exists]
 **Blocks agents:** [specific friction]
 **Build:** [specific fix]
 
-### Usage Monitoring
+---
+
+### Usage Monitoring — X/10
 **Today:** [what exists]
 **Blocks agents:** [specific friction]
 **Build:** [specific fix]
 
-### Self-Management
+---
+
+### Self-Management — X/10
 **Today:** [what exists]
 **Blocks agents:** [specific friction]
 **Build:** [specific fix]
 
-### Dev Readiness
+---
+
+### Dev Readiness — X/10
 **Today:** [what exists — error quality, idempotency, pagination, versioning, docs, SDKs, test mode, MCP quality, A2A]
 **Blocks integration:** [specific friction]
 **Build:** [specific fix]
+
+---
 
 ## Hard Blockers
 - [things that completely prevent agent use — fix these first]
 
 ## Quick Wins
-1. [highest impact, lowest effort]
+1. [highest impact, lowest effort — effort estimate]
 2. [next]
 3. [next]
 
 ## Roadmap
-[prioritized sequence: blockers -> quick wins -> full maturity]
+
+| Priority | Item | Effort | Reference |
+|----------|------|--------|-----------|
+| 1 | [what to build] | [time] | [who does it well] |
+| 2 | ... | ... | ... |
 ```
 
 ## Step 4: Roadmap
