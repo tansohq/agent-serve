@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/katrinalaszlo/agent-serve/main/schema/pricing.schema.json",
+  "$id": "https://raw.githubusercontent.com/tansohq/agent-serve/main/schema/pricing.schema.json",
   "title": "pricing.json",
   "description": "Machine-readable B2B SaaS pricing for agent discovery and comparison. Publish at your domain root: https://example.com/pricing.json",
   "type": "object",
@@ -8,7 +8,7 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "const": "https://raw.githubusercontent.com/katrinalaszlo/agent-serve/main/schema/pricing.schema.json"
+      "const": "https://raw.githubusercontent.com/tansohq/agent-serve/main/schema/pricing.schema.json"
     },
     "product": {
       "type": "object",

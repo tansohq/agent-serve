@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/katrinalaszlo/agent-serve/main/schema/pricing.schema.json",
+  "$schema": "https://raw.githubusercontent.com/tansohq/agent-serve/main/schema/pricing.schema.json",
   "product": {
     "name": "Acme Enrichment API",
     "vendor": "Acme Data Co",

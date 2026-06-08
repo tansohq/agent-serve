@@ -5,7 +5,7 @@ Make your product self-serve for AI agents.
 ## Install
 
 ```bash
-npx skills add katrinalaszlo/agent-serve
+npx skills add tansohq/agent-serve
 ```
 
 ## What this is
