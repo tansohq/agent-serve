@@ -4,7 +4,7 @@ description: "Audits a SaaS product across six areas to find what blocks AI agen
 when_to_use: "agent customers, API onboarding, programmatic purchasing, agent-friendly auth, MCP server, agentic commerce, self-serve for agents"
 disable-model-invocation: true
 user-invocable: true
-allowed-tools: WebFetch Read(*) Write(*) Bash(find *) Bash(grep *) Bash(ls *)
+allowed-tools: WebFetch Read(*) Bash(find *) Bash(grep *) Bash(ls *)
 argument-hint: "[url-or-nothing]"
 ---
 
@@ -196,3 +196,4 @@ Read [emerging-standards.md](references/emerging-standards.md) for standards to 
 - Don't recommend an MCP server unless the product already has a solid API. MCP is a layer on top of APIs, not a replacement.
 - Acknowledge business constraints. "Remove CAPTCHA" has security implications. Note the tradeoff, suggest alternatives (Web Bot Auth, proof-of-work, IP reputation).
 - If the product is pre-API (dashboard-only), say so clearly. Read [starting-from-zero.md](references/starting-from-zero.md) for the 4-week sequence.
+- When claiming middleware, auth, or any function is broken, trace it to the call site. Parameter names may not match the actual function being passed — a parameter called `ensureVisitor` might receive `ensureAuth` from the caller. Verify what function is actually bound, not just what the variable is named.
